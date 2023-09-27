@@ -6,7 +6,7 @@ export class PotsDtoCreate {
   name: string;
 }
 
-export class PotsDto {
+export class PotsDtoUpdate {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -15,7 +15,6 @@ export class PotsDto {
   @IsNotEmpty()
   plantID: string;
 }
-
 export class IdDto {
   @IsString()
   @IsNotEmpty()
