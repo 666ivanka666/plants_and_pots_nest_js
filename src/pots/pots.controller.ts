@@ -1,14 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { PotsService } from './pots.service'; 
-import { IdDto, PotsDto } from './dto'; 
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { PotsService } from './pots.service';
+import { IdDto, PotsDtoCreate, PotsDtoUpdate } from './dto';
 
 @Controller('pots')
 export class PotsController {
   constructor(private readonly potsService: PotsService) {}
 
   @Post()
-  addPots(@Body() body: PotsDto): any {
-    const generatedId = this.potsService.insertPots(body.name, body.plantID);
+  addPots(@Body() body: PotsDtoCreate): any {
+    const generatedId = this.potsService.insertPots(body.name);
     return { id: generatedId };
   }
 
@@ -23,15 +31,12 @@ export class PotsController {
   }
 
   @Put(':id')
-  updatePots(@Param() params: IdDto, @Body() body: PotsDto) {
-    console.log(params);
-    this.potsService.updatePlantsInPots(params.id, body.name, body.plantID);
-    return null;
+  updatePots(@Param() params: IdDto, @Body() body: PotsDtoUpdate) {
+    return this.potsService.updatePots(params.id, body.name, body.plantID);
   }
 
   @Delete(':id')
   deletePotsById(@Param() params: IdDto) {
-    this.potsService.deletePots(params.id);
-    return null;
+    return this.potsService.deletePots(params.id);
   }
 }
