@@ -29,6 +29,9 @@ export class PotsService {
       pots.name = name;
     }
     if (plantID) {
+      // TODO: dodali logiku za provjeru je li planID postoji vec u nekom drugom potu
+      // Napraviti novu metodu, koja ce provjervati je li postoji planID u nekom drugom potu
+      // ako postoji treba javiti gresku korisniku da planId vec postoji u nekom potu
       pots.plantID = plantID;
     }
 
