@@ -22,22 +22,44 @@ export class PotsService {
     return pots;
   }
 
+  // updatePots(potsId: string, name: string, plantID: string): Pots {
+  //   const [pots] = this.findPots(potsId);
+
+  //   if (name) {
+  //     pots.name = name;
+  //   }
+  //   if (plantID) {
+  //     // TODO: dodali logiku za provjeru je li planID postoji vec u nekom drugom potu
+  //     // Napraviti novu metodu, koja ce provjervati je li postoji planID u nekom drugom potu
+  //     // ako postoji treba javiti gresku korisniku da planId vec postoji u nekom potu
+  //     pots.plantID = plantID;
+  //   }
+
+  //   return pots;
+  // }
+
+  isPlantIDInUse(plantID: string): boolean {
+    return this.pots.some(pot => pot.plantID === plantID);
+  }
+  
   updatePots(potsId: string, name: string, plantID: string): Pots {
     const [pots] = this.findPots(potsId);
-
+  
     if (name) {
       pots.name = name;
     }
+    
     if (plantID) {
-      // TODO: dodali logiku za provjeru je li planID postoji vec u nekom drugom potu
-      // Napraviti novu metodu, koja ce provjervati je li postoji planID u nekom drugom potu
-      // ako postoji treba javiti gresku korisniku da planId vec postoji u nekom potu
+      if (this.isPlantIDInUse(plantID)) {
+        throw new Error(`Plant ID ${plantID} se koristi u drugoj posudi.`);
+      }
       pots.plantID = plantID;
     }
-
+  
     return pots;
   }
-
+  
+  
   deletePots(potsId: string): { message: string } {
     const [, index] = this.findPots(potsId);
     this.pots.splice(index, 1);
@@ -53,3 +75,6 @@ export class PotsService {
     return [this.pots[potsIndex], potsIndex];
   }
 }
+
+
+  
