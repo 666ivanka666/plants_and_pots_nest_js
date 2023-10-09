@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Pots } from './type';
 
@@ -38,28 +42,29 @@ export class PotsService {
   //   return pots;
   // }
 
-  isPlantIDInUse(plantID: string): boolean {
-    return this.pots.some(pot => pot.plantID === plantID);
+  isPlantInUse(plantID: string): boolean {
+    return this.pots.some((pot) => pot.plantID === plantID);
   }
-  
+
   updatePots(potsId: string, name: string, plantID: string): Pots {
     const [pots] = this.findPots(potsId);
-  
+
     if (name) {
       pots.name = name;
     }
-    
+
     if (plantID) {
-      if (this.isPlantIDInUse(plantID)) {
-        throw new Error(`Plant ID ${plantID} se koristi u drugoj posudi.`);
+      if (this.isPlantInUse(plantID)) {
+        throw new BadRequestException(
+          `Plant ID ${plantID} se koristi u drugoj posudi.`,
+        );
       }
       pots.plantID = plantID;
     }
-  
+
     return pots;
   }
-  
-  
+
   deletePots(potsId: string): { message: string } {
     const [, index] = this.findPots(potsId);
     this.pots.splice(index, 1);
@@ -75,6 +80,3 @@ export class PotsService {
     return [this.pots[potsIndex], potsIndex];
   }
 }
-
-
-  
